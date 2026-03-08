@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid'
-import {notes} from './notes.js'
+import {notes} from '../notes.js'
 
 /**
  * Get all notes
@@ -132,4 +132,4 @@ const deleteNoteById = (req, res) => {
   })
 }
 
-export {getNotes, createNote, getNoteById, updateNoteById, deleteNoteById}
+export {createNote, deleteNoteById, getNoteById, getNotes, updateNoteById}
