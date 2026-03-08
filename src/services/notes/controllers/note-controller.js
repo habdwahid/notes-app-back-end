@@ -1,4 +1,6 @@
 import {nanoid} from 'nanoid'
+import {InvariantError, NotFoundError} from '../../../exceptions/index.js'
+import response from '../../../utils/response.js'
 import {notes} from '../notes.js'
 
 /**
@@ -33,18 +35,11 @@ const createNote = (req, res, next) => {
   // Finding created note
   const isSuccess = notes.filter(note => note.id === id)
 
-  // Check if note created
-  if (isSuccess) return res.json({
-    status: 'success',
-    message: 'Catatan berhasil ditambahkan',
-    data: {noteId: id}
-  })
+  // Check if note fail to create
+  if (!isSuccess) return next(new InvariantError('Catatan gagal ditambahkan'))
 
-  // Otherwise return fail
-  return res.status(500).json({
-    status: 'error',
-    message: 'Catatan gagal untuk ditambahkan'
-  })
+  // Otherwise return success
+  return response(res, 201, 'Catatan berhasil ditambahkan', {noteId: id})
 }
 
 /**
@@ -53,23 +48,17 @@ const createNote = (req, res, next) => {
  * @param {String} notes
  * @returns {JSON} notes
  */
-const getNoteById = (req, res) => {
+const getNoteById = (req, res, next) => {
   const {id} = req.params
 
   // Finding note by id
   const note = notes.find(note => note.id === id)
 
-  // Check if note found
-  if (note) return res.json({
-    status: 'success',
-    data: {note}
-  })
+  // Check if note not found
+  if (!note) return next(new NotFoundError('Catatan tidak ditemukan'))
 
-  // Otherwise return fail
-  return res.status(404).json({
-    status: 'fail',
-    message: 'Catatan tidak ditemukan'
-  })
+  // Otherwise return success
+  return response(res, 200, 'Catatan sukses ditampilkan', {note})
 }
 
 /**
@@ -78,7 +67,7 @@ const getNoteById = (req, res) => {
  * @param {String} id
  * @returns {JSON} notes
  */
-const updateNoteById = (req, res) => {
+const updateNoteById = (req, res, next) => {
   const {id} = req.params
   const {title, tags, body} = req.body
   const updatedAt = new Date().toISOString()
@@ -86,21 +75,13 @@ const updateNoteById = (req, res) => {
   // Finding note index
   const index = notes.findIndex(note => note.id === id)
 
-  // Check if note index found
-  if (index !== -1) {
-    notes[index] = {...notes[index], title, updatedAt, tags, body}
+  // Check if note index not found
+  if (index === -1) return next(new NotFoundError('Catatan tidak ditemukan'))
+  
+  notes[index] = {...notes[index], title, updatedAt, tags, body}
 
-    return res.json({
-      status: 'success',
-      message: 'Catatan berhasil diperbaharui'
-    })
-  }
-
-  // Otherwise return fail
-  return res.status(404).json({
-    status: 'fail',
-    message: 'Gagal memperbarui catatan. Id catatan tidak ditemukan'
-  })
+  // Otherwise return success
+  return response(res, 200, 'Catatan berhasil diperbarui')
 }
 
 /**
@@ -109,27 +90,19 @@ const updateNoteById = (req, res) => {
  * @param {String} id
  * @returns {JSON} note
  */
-const deleteNoteById = (req, res) => {
+const deleteNoteById = (req, res, next) => {
   const {id} = req.params
 
   // Finding note index
   const index = notes.findIndex(note => note.id === id)
 
-  // Check if note index found
-  if (index !== -1) {
-    notes.splice(index, 1)
+  // Check if note index not found
+  if (index === -1) return next(new NotFoundError('Catatan tidak ditemukan'))
 
-    return res.json({
-      status: 'success',
-      message: 'Catatan berhasil dihapus'
-    })
-  }
+  notes.splice(index, 1)
 
-  // Otherwise return fail
-  return res.status(404).json({
-    status: 'fail',
-    message: 'Catatan gagal dihapus. Id catatan tidak ditemukan'
-  })
+  // Otherwise return success
+  return response(res, 200, 'Catatan berhasil dihapus')
 }
 
 export {createNote, deleteNoteById, getNoteById, getNotes, updateNoteById}
