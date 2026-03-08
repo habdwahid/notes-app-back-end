@@ -1,0 +1,16 @@
+import {ClientError} from '../exceptions/index.js'
+import response from '../utils/response.js'
+
+const ErrorHandler = (err, req, res, next) => {
+  // Check if error is client error
+  if (err instanceof ClientError) return response(res, err.status, err.message, null)
+
+  const status = err.statusCode || err.status || 500
+  const message = err.message || 'Internal server error'
+
+  // Print unhandled error in console
+  console.error('Unhandled error: ', err)
+  return response(res, status, message, null)
+}
+
+export default ErrorHandler
