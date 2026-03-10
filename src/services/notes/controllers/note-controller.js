@@ -21,7 +21,7 @@ const getNotes = (req, res) => {
  * @returns {JSON} notes
  */
 const createNote = (req, res, next) => {
-  const {title = 'Untitled', tags, body} = req.body
+  const {title = 'Untitled', tags, body} = req.validated
   const id = nanoid(16)
   const createdAt = new Date().toISOString()
   const updatedAt = createdAt
@@ -69,7 +69,7 @@ const getNoteById = (req, res, next) => {
  */
 const updateNoteById = (req, res, next) => {
   const {id} = req.params
-  const {title, tags, body} = req.body
+  const {title, tags, body} = req.validated
   const updatedAt = new Date().toISOString()
 
   // Finding note index
