@@ -38,7 +38,7 @@ npm install
 ### Running the Application
 - **Development Mode:**
 ```bash
-npm run start-dev
+npm run dev
 ```
 
 - **Production Mode:**
