@@ -1,5 +1,5 @@
 # Notes App Back End
-> This project is a submission for the **"Belajar Membuat Aplikasi Back-End untuk Pemula"** course at **Dicoding Indonesia**.
+> This project is a submission for the **"Belajar Membuat Aplikasi Back-End untuk Pemula"** and **"Belajar Fundamental Back-End Dengan JavaScript"** course at **Dicoding Indonesia**.
 
 A lightweight RESTful API designed to manage personal notes. This project serves as a robust back-end service that allows users to create, store, view, update, and delete note entries.
 
@@ -12,7 +12,7 @@ A lightweight RESTful API designed to manage personal notes. This project serves
 ## 🛠️ Tech Stack
 - Runtime: Node.js
 - Framework: Express.js
-- Data Storage: In-memory Array
+- Data Storage: PostgreSQL
 - Tooling: Nodemon for development, ESLint for code quality.
 
 ## 🏁 Getting Started
@@ -50,10 +50,10 @@ npm run start
 
 | Method | Endpoint | Description |
 | :---: | :--- | :--- |
-| ```POST``` | ```/notes``` | Create a new note |
-| ```GET``` | ```/notes``` | Retrieve all notes |
-| ```GET``` | ```/notes/{id}``` | Get details of a specific note |
-| ```PUT``` | ```/notes/{id}``` | Update an existing note |
-| ```DELETE``` | ```/notes/{id}``` | Delete a note by ID |
+| ``POST`` | ``/notes`` | Create a new note |
+| ``GET`` | ``/notes`` | Retrieve all notes |
+| ``GET`` | ``/notes/{id}`` | Get details of a specific note |
+| ``PUT`` | ``/notes/{id}`` | Update an existing note |
+| ``DELETE`` | ``/notes/{id}`` | Delete a note by ID |
 
 **Note**: Ensure you include a JSON ```body``` when making ```POST``` and ```PUT``` requests to ensure the data is processed correctly.
