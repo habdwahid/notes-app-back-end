@@ -1,9 +1,14 @@
 import {Router} from 'express'
 import notes from '../services/notes/routes/index.js'
+import users from '../services/users/routes/index.js'
 
 // Router init
 const router = Router()
 
+// Note routes
 router.use('/', notes)
+
+// User routes
+router.use('/', users)
 
 export default router
