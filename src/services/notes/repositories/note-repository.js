@@ -13,17 +13,18 @@ class NoteRepositories {
    * @param {String} note.id
    * @param {String} note.body
    * @param {Array} note.tags
+   * @param {String} note.owner
    * @returns {String} id
    */
-  async createNote({title, body, tags}) {
+  async createNote({title, body, tags, owner}) {
     const id = nanoid(16)
     const createdAt = new Date().toISOString()
     const updatedAt = createdAt
 
     // Query to insert into storage
     const query = {
-      text: 'INSERT INTO notes(id, title, body, tags, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
-      values: [id, title, body, tags, createdAt, updatedAt]
+      text: 'INSERT INTO notes(id, title, body, tags, created_at, updated_at, owner) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+      values: [id, title, body, tags, createdAt, updatedAt, owner]
     }
 
     // Inserting into storage
@@ -35,11 +36,18 @@ class NoteRepositories {
   /**
    * Get all notes from storage
    * 
+   * @param {String} owner
    * @returns {JSON} notes
    */
-  async getNotes() {
+  async getNotes(owner) {
+    // Get notes query
+    const query = {
+      text: 'SELECT * FROM notes WHERE owner = $1',
+      values: [owner]
+    }
+
     // Getting all notes from storage
-    const result = await this.pool.query('SELECT * FROM notes')
+    const result = await this.pool.query(query)
 
     return result.rows
   }
@@ -103,6 +111,33 @@ class NoteRepositories {
 
     // Deleting note details from storage
     const result = await this.pool.query(query)
+
+    return result.rows[0]
+  }
+
+  /**
+   * Verify note owner from storage
+   * 
+   * @param {String} id
+   * @param {String} owner
+   */
+  async verifyNoteOwner(id, owner) {
+    // Verify note owner query
+    const query = {
+      text: 'SELECT * FROM notes WHERE id = $1',
+      values: [id]
+    }
+
+    // Finding note by id from storage
+    const result = await this.pool.query(query)
+
+    // If note don't exist
+    if (!result.rows.length) return null
+
+    const note = result.rows[0]
+
+    // If note owner and owner is not same
+    if (note.owner !== owner) return null
 
     return result.rows[0]
   }
