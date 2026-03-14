@@ -71,6 +71,38 @@ class UserRepositories {
 
     return result.rows[0]
   }
+
+  /**
+   * Verify user credential
+   * 
+   * @param {String} username
+   * @param {String} password
+   * @returns {String} id
+   */
+  async verifyUserCredential(username, password) {
+    // Search user by username query
+    const query = {
+      text: 'SELECT id, username, password FROM users where username = $1',
+      values: [username]
+    }
+
+    // Searching user from storage
+    const result = await this.pool.query(query)
+
+    // If user not found
+    if (!result) return null
+
+    const {id, password: hashedPassword} = result.rows[0]
+
+    // Comparing hased password and user password
+    const matchPassword = await bcrypt.compare(password, hashedPassword)
+
+    // If password not match
+    if (!matchPassword) return null
+
+    // Otherwise return success
+    return id
+  }
 }
 
 export default new UserRepositories()

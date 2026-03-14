@@ -1,4 +1,4 @@
-import InvariantError, {NotFoundError} from '../../../exceptions/index.js'
+import {InvariantError, NotFoundError} from '../../../exceptions/index.js'
 import response from '../../../utils/response.js'
 import UserRepositories from '../repositories/user-repository.js'
 
