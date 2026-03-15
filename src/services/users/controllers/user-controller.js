@@ -40,4 +40,19 @@ const getUserById = async (req, res, next) => {
   return response(res, 200, 'User sukses ditampilkan', {user})
 }
 
-export {createUser, getUserById}
+/**
+ * Get users by username from storage
+ * 
+ * @returns {JSON} response
+ */
+const getUsersByUsername = async (req, res, next) => {
+  const {username} = req.query.username
+  const user = await UserRepositories.getUsersByUsername(username)
+
+  // Check if user not found
+  if (!user) return next(new NotFoundError('User tidak ditemukan'))
+
+  return response(res, 200, 'User berhasil ditampilkan', {users: user})
+}
+
+export {createUser, getUserById, getUsersByUsername}

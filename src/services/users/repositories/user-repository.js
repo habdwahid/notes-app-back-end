@@ -103,6 +103,24 @@ class UserRepositories {
     // Otherwise return success
     return id
   }
+
+  /**
+   * Get users by username from storage
+   * 
+   * @param {String} username
+   */
+  async getUsersByUsername(username) {
+    // Get users by username query
+    const query = {
+      text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1',
+      values: [`%${username}%`]
+    }
+
+    // Getting users by username from storage
+    const result = await this.pool.query(query)
+
+    return result.rows
+  }
 }
 
 export default new UserRepositories()
