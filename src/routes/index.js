@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import collaborations from '../services/collaborations/routes/index.js'
 import notes from '../services/notes/routes/index.js'
 import users from '../services/users/routes/index.js'
 
@@ -10,5 +11,8 @@ router.use('/', notes)
 
 // User routes
 router.use('/', users)
+
+// Collaboration routes
+router.use('/', collaborations)
 
 export default router
