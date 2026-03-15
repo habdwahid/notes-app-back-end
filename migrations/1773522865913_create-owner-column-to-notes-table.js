@@ -14,6 +14,8 @@ export const up = (pgm) => {
       type: 'VARCHAR(50)'
     }
   })
+
+  pgm.addConstraint('notes', 'fk_notes.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE')
 }
 
 /**
@@ -23,4 +25,6 @@ export const up = (pgm) => {
  */
 export const down = (pgm) => {
   pgm.dropColumn('notes', 'owner')
+
+  pgm.dropConstraint('notes', 'fk_notes.owner_users.id')
 }
